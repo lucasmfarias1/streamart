@@ -25,15 +25,15 @@ module Api
 
       test 'logs out user' do
         user = users(:one)
-        header = {
+        headers = {
           'X-User-Email': user.email,
           'X-User-Token': user.authentication_token
         }
         old_token = user.authentication_token
 
         delete(
-          api_v1_session_path(user.id),
-          headers: header
+          api_v1_session_path(user),
+          headers: headers
         )
 
         new_token = user.reload.authentication_token
