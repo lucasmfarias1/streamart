@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_05_012206) do
+ActiveRecord::Schema.define(version: 2020_04_05_205028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "gig_items", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.decimal "price", precision: 8, scale: 2
+    t.bigint "gig_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gig_id"], name: "index_gig_items_on_gig_id"
+  end
+
+  create_table "gigs", force: :cascade do |t|
+    t.integer "status", null: false
+    t.integer "customer_id", null: false
+    t.integer "artist_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "services", force: :cascade do |t|
     t.string "title"
@@ -44,5 +62,6 @@ ActiveRecord::Schema.define(version: 2020_04_05_012206) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "gig_items", "gigs"
   add_foreign_key "services", "users"
 end

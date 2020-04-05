@@ -8,4 +8,11 @@ one:
   email: 'test@test.com'
   authentication_token: 'asdf1234'
   confirmed_at: <%= Time.now %>
-# column: value
+artist:
+  email: 'art@ist.com'
+  authentication_token: 'artistoken321'
+  confirmed_at: <%= Time.now %>
+customer:
+  email: 'cust@omer.com'
+  authentication_token: 'customertoken123'
+  confirmed_at: <%= Time.now %>

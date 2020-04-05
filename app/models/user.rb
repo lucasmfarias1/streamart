@@ -2,6 +2,19 @@ class User < ApplicationRecord
   acts_as_token_authenticatable
 
   has_many :services
+  has_many(
+    :gigs_as_artist,
+    class_name: 'Gig',
+    foreign_key: :artist_id,
+    inverse_of: :artist
+  )
+  has_many(
+    :gigs_as_customer,
+    class_name: 'Gig',
+    foreign_key: :customer_id,
+    inverse_of: :customer
+  )
+  
   accepts_nested_attributes_for(
     :services,
     reject_if: :all_blank,
