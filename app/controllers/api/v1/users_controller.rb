@@ -3,17 +3,19 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     @user = User.new(user_signup_params)
-
+    # talvez precise implementar algo assim, resolver depois
+    # @user.avatar.attach(params[:avatar])
+    
     if @user.save
       render :create, status: :created
     else
       head :unprocessable_entity
     end
   end
-
+  
   def update
     @user = current_user
-
+    
     if @user.update(user_params)
       head :ok
     else
@@ -24,12 +26,13 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_signup_params
-    params.require(:user).permit(:email, :password)
+    params.require(:user).permit(:email, :password, :avatar)
   end
 
   def user_params
     params.required(:user).permit(
       :password,
+      :avatar,
       services_attributes: [:id, :title, :description, :price]
     )
   end

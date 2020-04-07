@@ -6,7 +6,8 @@ module Api
       test 'creates user' do
         user_params = {
           email: Faker::Internet.email,
-          password: Faker::Internet.password
+          password: Faker::Internet.password,
+          avatar: fixture_file_upload('images/axe.jpg', 'image/jpg')
         }
 
         post(
@@ -32,6 +33,7 @@ module Api
         }
         user_params = {
           password: Faker::Internet.password,
+          avatar: fixture_file_upload('images/axe.jpg', 'image/jpg'),
           services_attributes: [
             {
               title: 'Emote',

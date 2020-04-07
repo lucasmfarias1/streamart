@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   acts_as_token_authenticatable
 
+  has_one_attached :avatar
+
   has_many :services
   has_many(
     :gigs_as_artist,
@@ -26,4 +28,15 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable
+
+  # validate :avatar_type
+  
+  private
+
+  def avatar_type
+    if avatar.attached? == false ||
+       !avatar.content_type.in?(%('images/jpeg' images/png))
+      errors.add(:avatar, "are missing!")
+    end
+  end
 end

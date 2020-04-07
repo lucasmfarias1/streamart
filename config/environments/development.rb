@@ -50,5 +50,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Sets the mailer host/port
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  # Sets the service used by active_storage in this environment (storage.yml)
+  config.active_storage.service = :local
 end
