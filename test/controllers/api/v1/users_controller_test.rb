@@ -13,7 +13,7 @@ module Api
         post(
           api_v1_users_path,
           headers: @header,
-          params: { user: user_params }
+          params: user_params
         )
 
         response = JSON.parse(@response.body)['data']['user']
@@ -51,7 +51,7 @@ module Api
         patch(
           api_v1_user_path(user),
           headers: headers,
-          params: { user: user_params }
+          params: user_params
         )
 
         new_service_count = user.reload.services.count

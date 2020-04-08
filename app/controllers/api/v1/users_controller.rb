@@ -5,7 +5,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_signup_params)
     # talvez precise implementar algo assim, resolver depois
     # @user.avatar.attach(params[:avatar])
-    
+
     if @user.save
       render :create, status: :created
     else
@@ -26,11 +26,11 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_signup_params
-    params.require(:user).permit(:email, :password, :avatar)
+    params.permit(:email, :password, :avatar)
   end
 
   def user_params
-    params.required(:user).permit(
+    params.permit(
       :password,
       :avatar,
       services_attributes: [:id, :title, :description, :price]
