@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
+class Api::V1::ProposalItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @artist = users(:artist)
     @service = @artist.services.create({
@@ -9,6 +9,11 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
       price: 4.99
     })
     @customer = users(:customer)
+    @proposal = Proposal.create({
+      artist: @artist,
+      customer: @customer,
+      status: 1
+    })
 
     @headers = {
       'X-User-Email': @customer.email,
@@ -17,19 +22,14 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'creates a proposal item' do
-    proposal = Proposal.create({
-      artist: @artist,
-      customer: @customer,
-      status: 1
-    })
     proposal_item_params = { service_id: @service.id }
 
     assert_difference([
       'ProposalItem.count',
-      'proposal.proposal_items.count'
+      '@proposal.proposal_items.count'
     ], 1) do
       post(
-        api_v1_proposal_proposal_items_path(proposal_id: proposal),
+        api_v1_proposal_proposal_items_path(@proposal),
         headers: @headers,
         params: proposal_item_params
       )
@@ -39,6 +39,25 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert proposal_item.service == @service
-    assert proposal_item.proposal == proposal
+    assert proposal_item.proposal == @proposal
+  end
+
+  test 'updates a proposal item' do
+    proposal_item = ProposalItem.create({
+      proposal_id: @proposal.id,
+      service_id: @service.id
+    })
+    proposal_item_params = {
+      title: 'Happy face emote',
+      description: 'An emote that depicts a happy face'
+    }
+
+    assert_changes 'proposal_item.reload.updated_at' do
+      patch(
+        api_v1_proposal_item_path(proposal_item),
+        headers: @headers,
+        params: proposal_item_params
+      )
+  end
   end
 end

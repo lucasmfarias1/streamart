@@ -1,10 +1,12 @@
 class Api::V1::ProposalItemsController < ApplicationController
+  before_action :fetch_proposal_item, only: [:update]
+  
   def create
     proposal = Proposal.find(params[:proposal_id])
     service = proposal
       .artist
       .services
-      .where(id: proposal_item_params[:service_id])
+      .where(id: params[:service_id])
       .first
 
     proposal_item = ProposalItem.new({
@@ -19,9 +21,21 @@ class Api::V1::ProposalItemsController < ApplicationController
     end
   end
 
+  def update
+    if @proposal_item.update(proposal_item_params)
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def proposal_item_params
-    params.permit(:service_id)
+    params.permit(:title, :description)
+  end
+
+  def fetch_proposal_item
+    @proposal_item = ProposalItem.find(params[:id])
   end
 end

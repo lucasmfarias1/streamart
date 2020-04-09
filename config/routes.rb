@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       resources :sessions, only: [:create, :destroy]
       resources :users, only: [:create, :update]
       resources :proposals, only: [:create] do
-        resources :proposal_items, only: [:create]
+        resources :proposal_items, only: [:create, :update], shallow: true
       end
       resources :gigs, only: [:create]
     end
