@@ -58,6 +58,38 @@ class Api::V1::ProposalItemsControllerTest < ActionDispatch::IntegrationTest
         headers: @headers,
         params: proposal_item_params
       )
+    end
   end
+
+  test 'deletes a proposal item' do
+    proposal_item = ProposalItem.create({
+      proposal_id: @proposal.id,
+      service_id: @service.id
+    })
+
+    assert_difference('ProposalItem.count', -1) do
+      delete(
+        api_v1_proposal_item_path(proposal_item),
+        headers: @headers
+      )
+    end
+  end
+
+  test 'shows a proposal item' do
+    proposal_item = ProposalItem.create({
+      proposal_id: @proposal.id,
+      service_id: @service.id
+    })
+
+    get(
+      api_v1_proposal_item_path(proposal_item),
+      headers: @headers
+    )
+
+    response = JSON.parse(@response.body)['data']['proposal_item']
+
+    assert response['id'] == proposal_item.id
+    assert response['title'] == proposal_item.title
+    assert response['description'] == proposal_item.description
   end
 end

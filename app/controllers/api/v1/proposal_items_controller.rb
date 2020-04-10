@@ -1,5 +1,9 @@
 class Api::V1::ProposalItemsController < ApplicationController
-  before_action :fetch_proposal_item, only: [:update]
+  before_action :fetch_proposal_item, only: [:update, :destroy, :show]
+
+  def show
+    render :show, status: :ok
+  end
   
   def create
     proposal = Proposal.find(params[:proposal_id])
@@ -29,6 +33,15 @@ class Api::V1::ProposalItemsController < ApplicationController
     end
   end
 
+  def destroy
+
+    if @proposal_item.destroy
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def proposal_item_params
@@ -36,6 +49,9 @@ class Api::V1::ProposalItemsController < ApplicationController
   end
 
   def fetch_proposal_item
-    @proposal_item = ProposalItem.find(params[:id])
+    @proposal_item = current_user
+      .proposal_items_as_customer
+      .where(id: params[:id])
+      .first
   end
 end

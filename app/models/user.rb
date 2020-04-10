@@ -27,6 +27,11 @@ class User < ApplicationRecord
     foreign_key: :customer_id,
     inverse_of: :customer
   )
+  has_many(
+    :proposal_items_as_customer,
+    through: :proposals_as_customer,
+    source: :proposal_items
+  )
   
   accepts_nested_attributes_for(
     :services,
@@ -41,6 +46,10 @@ class User < ApplicationRecord
          :confirmable
 
   # validate :avatar_type
+
+  def is_admin?
+    return true
+  end
   
   private
 
