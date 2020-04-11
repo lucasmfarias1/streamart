@@ -47,7 +47,7 @@ class User < ApplicationRecord
 
   # validate :avatar_type
 
-  def is_admin?
+  def admin?
     return true
   end
   

@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   acts_as_token_authentication_handler_for User, except: [:create]
-  before_action :fetch_user, only: [:update]
+  before_action :set_user, only: [:update]
+  after_action :verify_authorized, except: :create
 
   def create
     @user = User.new(user_signup_params)
@@ -36,9 +37,7 @@ class Api::V1::UsersController < ApplicationController
     )
   end
 
-  def fetch_user
-    @user = User.find(params[:id])
-
-    head :unauthorized unless current_user == @user || current_user.is_admin?
+  def set_user
+    @user = authorize User.find(params[:id])
   end
 end

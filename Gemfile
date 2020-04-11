@@ -45,3 +45,5 @@ gem 'devise', '4.7.1'
 gem 'simple_token_authentication', '1.17.0'
 
 gem 'faker', '2.11.0'
+
+gem 'pundit', '2.1.0'

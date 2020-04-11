@@ -12,9 +12,7 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'creates a proposal' do
-    proposal_params = {
-      artist_id: @artist.id
-    }
+    proposal_params = { artist_id: @artist.id }
 
     assert_difference([
       'Proposal.count',
@@ -24,7 +22,7 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
       post(
         api_v1_proposals_path,
         headers: @headers,
-        params: { proposal: proposal_params }
+        params: proposal_params
       )
     end
 

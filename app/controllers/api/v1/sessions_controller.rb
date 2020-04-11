@@ -1,5 +1,6 @@
 class Api::V1::SessionsController < ApplicationController
   acts_as_token_authentication_handler_for User, except: [:create]
+  after_action :verify_authorized, except: [:create]
 
   def create
     @user = User.find_by email: params[:email]
@@ -12,8 +13,10 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def destroy
-    current_user&.authentication_token = nil
-    if current_user&.save
+    user = authorize(User.find(params[:id]), :update?)
+    user.authentication_token = nil
+
+    if user.save
       head :ok
     else
       head :unauthorized

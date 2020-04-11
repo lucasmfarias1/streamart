@@ -1,22 +1,16 @@
 class Api::V1::ProposalItemsController < ApplicationController
-  before_action :fetch_proposal_item, only: [:update, :destroy, :show]
+  before_action :set_proposal_item, only: [:update, :destroy, :show]
 
   def show
     render :show, status: :ok
   end
   
   def create
-    proposal = Proposal.find(params[:proposal_id])
-    service = proposal
-      .artist
-      .services
-      .where(id: params[:service_id])
-      .first
-
     proposal_item = ProposalItem.new({
-      proposal_id: proposal.id,
-      service_id: service.id
+      proposal_id: params[:proposal_id],
+      service_id: params[:service_id]
     })
+    authorize proposal_item
 
     if proposal_item.save
       head :ok
@@ -34,7 +28,6 @@ class Api::V1::ProposalItemsController < ApplicationController
   end
 
   def destroy
-
     if @proposal_item.destroy
       head :ok
     else
@@ -48,10 +41,7 @@ class Api::V1::ProposalItemsController < ApplicationController
     params.permit(:title, :description)
   end
 
-  def fetch_proposal_item
-    @proposal_item = current_user
-      .proposal_items_as_customer
-      .where(id: params[:id])
-      .first
+  def set_proposal_item
+    @proposal_item = authorize ProposalItem.find(params[:id])
   end
 end
