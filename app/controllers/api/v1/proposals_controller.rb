@@ -1,11 +1,34 @@
 class Api::V1::ProposalsController < ApplicationController
-  after_action :verify_authorized, except: :create
+  before_action :set_proposal, only: [:show, :destroy, :submit]
 
   def create
     proposal = current_user.proposals_as_customer.build(proposal_params)
     proposal.status = 1
+    authorize proposal
 
     if proposal.save
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
+  def show
+    render :show, status: :ok
+  end
+
+  def destroy
+    if @proposal.destroy
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
+  def submit
+    @proposal.status = 2
+
+    if @proposal.save
       head :ok
     else
       head :unprocessable_entity
@@ -16,5 +39,9 @@ class Api::V1::ProposalsController < ApplicationController
 
   def proposal_params
     params.permit(:artist_id)
+  end
+
+  def set_proposal
+    @proposal = authorize Proposal.find(params[:id])
   end
 end

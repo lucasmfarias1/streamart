@@ -18,4 +18,9 @@ class Proposal < ApplicationRecord
     greater_than_or_equal_to: 1,
     less_than_or_equal_to: 3
   }
+
+  # STATUSES
+  # 1 - PENDING
+  # 2 - SUBMITTED
+  # 3 - ACCEPTED
 end
