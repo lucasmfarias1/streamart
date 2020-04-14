@@ -55,7 +55,7 @@ class User < ApplicationRecord
 
   def avatar_type
     if avatar.attached? == false ||
-       !avatar.content_type.in?(%('images/jpeg' images/png))
+       !image.content_type.in?(['image/jpeg', 'image/png'])
       errors.add(:avatar, "are missing!")
     end
   end

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
           shallow: true
         )
       end
+      resources :proposal_images, only: [:create, :destroy]
     end
   end
 end
