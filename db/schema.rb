@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 2020_04_08_023618) do
     t.string "title"
     t.string "description"
     t.decimal "price", precision: 8, scale: 2
+    t.string "title_service"
+    t.string "description_service"
     t.bigint "gig_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -66,7 +68,7 @@ ActiveRecord::Schema.define(version: 2020_04_08_023618) do
   end
 
   create_table "proposals", force: :cascade do |t|
-    t.integer "status", null: false
+    t.integer "status", default: 1, null: false
     t.integer "customer_id", null: false
     t.integer "artist_id", null: false
     t.datetime "created_at", precision: 6, null: false

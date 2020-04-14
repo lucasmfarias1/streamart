@@ -1,52 +1,46 @@
-# require 'test_helper'
+require 'test_helper'
 
-# class Api::V1::GigsControllerTest < ActionDispatch::IntegrationTest
-#   setup do
-#     @artist = users(:artist)
-#     @customer = users(:customer)
+class Api::V1::GigsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @artist = users(:artist)
+    @customer = users(:customer)
+    @service = @artist.services.create(
+      title: 'Art',
+      description: 'Generic art about anything',
+      price: 9.99
+    )
+    @proposal = @customer.proposals_as_customer.create(
+      artist: @artist,
+      status: 1
+    )
+    @proposal_item = @proposal.proposal_items.create(
+      service: @service,
+      title: 'Happy face emote',
+      description: 'An emote of a happy face'
+    )
 
-#     @headers = {
-#       'X-User-Email': @customer.email,
-#       'X-User-Token': @customer.authentication_token
-#     }
-#   end
+    @headers = {
+      'X-User-Email': @artist.email,
+      'X-User-Token': @artist.authentication_token
+    }
+  end
 
-#   test 'creates a gig' do
-#     gig_params = {
-#       artist_id: @artist.id,
-#       gig_items_attributes: [
-#         {
-#           title: 'Emote',
-#           description: 'Your regular Twitch.tv emote',
-#           price: 4.99
-#         },
-#         {
-#           title: 'Emote',
-#           description: 'Another regular Twitch.tv emote',
-#           price: 4.99
-#         },
-#         {
-#           title: 'Avatar',
-#           description: 'Your regular Twitch.tv avatar',
-#           price: 9.99
-#         },
-#       ]
-#     }
+  test 'creates a gig' do
+    # proposal status 2 means SUBMITTED
+    @proposal.update(status: 2)
 
-#     post(
-#       api_v1_gigs_path,
-#       headers: @headers,
-#       params: { gig: gig_params }
-#     )
-#     gig = Gig.first
+    gig_params = { proposal_id: @proposal.id }
 
-#     assert_response :success
-#     assert Gig.count == 1
-#     assert GigItem.count == 3
-#     assert @artist.gigs_as_artist.count == 1
-#     assert @customer.gigs_as_customer.count == 1
-#     assert gig.status == 1
-#     assert gig.customer == @customer
-#     assert gig.artist == @artist
-#   end
-# end
+    assert_difference(['Gig.count', '@proposal.reload.status'], 1) do
+      post(
+        api_v1_gigs_path,
+        headers: @headers,
+        params: gig_params
+      )
+    end
+
+    gig = @artist.gigs_as_artist.last
+
+    assert @proposal.proposal_items.count == gig.gig_items.count
+  end
+end

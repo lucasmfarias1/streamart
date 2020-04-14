@@ -23,4 +23,16 @@ class Proposal < ApplicationRecord
   # 1 - PENDING
   # 2 - SUBMITTED
   # 3 - ACCEPTED
+
+  def pending?
+    status == 1
+  end
+
+  def submitted?
+    status == 2
+  end
+
+  def accepted?
+    status == 3
+  end
 end

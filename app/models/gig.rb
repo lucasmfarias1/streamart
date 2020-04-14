@@ -21,6 +21,11 @@ class Gig < ApplicationRecord
   validates :status, numericality: {
     only_integer: true,
     greater_than_or_equal_to: 1,
-    less_than_or_equal_to: 4
+    less_than_or_equal_to: 3
   }
+
+  # STATUS
+  # 1 - PENDING PAYMENT
+  # 2 - PAID AND ONGOING
+  # 3 - FINISHED
 end

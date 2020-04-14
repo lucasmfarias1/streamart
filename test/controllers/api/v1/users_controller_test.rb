@@ -12,7 +12,6 @@ module Api
 
         post(
           api_v1_users_path,
-          headers: @header,
           params: user_params
         )
 
