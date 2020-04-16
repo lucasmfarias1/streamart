@@ -1,5 +1,5 @@
 class Api::V1::ProposalImagesController < ApplicationController
-  before_action :set_proposal_image, only: :destroy
+  before_action :set_proposal_image, only: [:destroy, :show]
 
   def show
     render :show, status: :ok

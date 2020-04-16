@@ -43,4 +43,33 @@ class Api::V1::GigsControllerTest < ActionDispatch::IntegrationTest
 
     assert @proposal.proposal_items.count == gig.gig_items.count
   end
+
+  test 'shows a gig' do
+    gig = Gig.create(
+      artist: @proposal.artist,
+      customer: @proposal.customer,
+      status: 1
+    )
+    @proposal.proposal_items.each do |proposal_item|
+      gig.gig_items.create(
+        title: proposal_item.title,
+        description: proposal_item.description,
+        price: proposal_item.service.price,
+        title_service: proposal_item.service.title,
+        description_service: proposal_item.service.description
+      )
+    end
+
+    get(
+      api_v1_gig_path(gig),
+      headers: @headers
+    )
+
+    result = JSON.parse(@response.body)['data']['gig']
+    gig_returned = Gig.find(result['id'])
+
+    assert_response :success
+    assert gig == gig_returned
+    assert gig.gig_items.count == result['gig_items'].count
+  end
 end

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :sessions, only: [:create, :destroy]
       resources :users, only: [:create, :update]
-      resources :gigs, only: [:create]
+      resources :gigs, only: [:create, :show]
       resources :proposals, only: [:create, :show, :destroy] do
         post :submit, on: :member
 
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
           shallow: true
         )
       end
-      resources :proposal_images, only: [:create, :destroy]
+      resources :proposal_images, only: [:create, :destroy, :show]
     end
   end
 end

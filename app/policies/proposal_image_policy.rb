@@ -5,6 +5,10 @@ class ProposalImagePolicy < ApplicationPolicy
     end
   end
 
+  def show?
+    proposal_customer_is_user? || user.admin?
+  end
+
   def create?
     proposal_customer_is_user? && proposal_is_pending?
   end

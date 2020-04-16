@@ -5,6 +5,10 @@ class GigPolicy < ApplicationPolicy
     end
   end
 
+  def show?
+    gig_artist_is_user || gig_customer_is_user || user.admin?
+  end
+
   def create?
     gig_artist_is_user
   end
@@ -13,5 +17,9 @@ class GigPolicy < ApplicationPolicy
 
   def gig_artist_is_user
     record.artist == user
+  end
+
+  def gig_customer_is_user
+    record.customer == user
   end
 end

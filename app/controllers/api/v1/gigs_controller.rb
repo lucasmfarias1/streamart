@@ -1,4 +1,6 @@
 class Api::V1::GigsController < ApplicationController
+  before_action :set_gig, only: [:show]
+  
   def create
     proposal = current_user
       .proposals_as_artist
@@ -31,9 +33,17 @@ class Api::V1::GigsController < ApplicationController
     end
   end
 
+  def show
+    render :show, status: :ok
+  end
+
   private
 
   def gig_params
     params.permit(:proposal_id)
+  end
+
+  def set_gig
+    @gig = authorize Gig.find(params[:id])
   end
 end
