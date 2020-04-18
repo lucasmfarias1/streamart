@@ -90,6 +90,7 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
         headers: @headers
       )
     end
+    assert proposal.submitted?
   end
 
   test 'rejects a proposal' do
@@ -107,5 +108,6 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
         headers: @headers
       )
     end
+    assert proposal.pending?
   end
 end

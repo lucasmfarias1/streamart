@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :sessions, only: [:create, :destroy]
       resources :users, only: [:create, :update]
-      resources :gigs, only: [:create, :show]
+      resources :gigs, only: [:create, :show] do
+        post :finish, on: :member
+      end
       resources :proposals, only: [:create, :show, :destroy] do
         post :submit, on: :member
         post :reject, on: :member

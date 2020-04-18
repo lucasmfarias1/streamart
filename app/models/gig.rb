@@ -25,7 +25,14 @@ class Gig < ApplicationRecord
   }
 
   # STATUS
-  # 1 - PENDING PAYMENT
-  # 2 - PAID AND ONGOING
-  # 3 - FINISHED
+  # 1 - ONGOING
+  # 2 - FINISHED
+
+  def ongoing?
+    status == 1
+  end
+
+  def finished?
+    status == 2
+  end
 end

@@ -1,5 +1,5 @@
 class Api::V1::GigsController < ApplicationController
-  before_action :set_gig, only: [:show]
+  before_action :set_gig, only: [:show, :finish]
   
   def create
     proposal = current_user
@@ -35,6 +35,16 @@ class Api::V1::GigsController < ApplicationController
 
   def show
     render :show, status: :ok
+  end
+
+  def finish
+    @gig.status = 2
+
+    if @gig.save
+      head :ok
+    else
+      head :unprocessable_entity
+    end
   end
 
   private

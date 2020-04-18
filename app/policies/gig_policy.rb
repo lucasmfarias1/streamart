@@ -13,6 +13,10 @@ class GigPolicy < ApplicationPolicy
     gig_artist_is_user
   end
 
+  def finish?
+    (gig_artist_is_user || gig_customer_is_user) && record.ongoing?
+  end
+
   private
 
   def gig_artist_is_user
