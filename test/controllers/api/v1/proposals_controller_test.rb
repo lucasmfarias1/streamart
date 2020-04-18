@@ -91,4 +91,21 @@ class Api::V1::ProposalsControllerTest < ActionDispatch::IntegrationTest
       )
     end
   end
+
+  test 'rejects a proposal' do
+    # status 2 == submitted
+    proposal = Proposal.create(
+      artist: @artist,
+      customer: @customer,
+      status: 2
+    )
+    proposal.proposal_items.create(service: @service)
+
+    assert_difference 'proposal.reload.status', -1 do
+      post(
+        reject_api_v1_proposal_path(proposal),
+        headers: @headers
+      )
+    end
+  end
 end

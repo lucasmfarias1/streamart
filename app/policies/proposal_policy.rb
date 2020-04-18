@@ -6,7 +6,9 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def show?
-    proposal_is_owned_by_user || user.admin?
+    user_is_proposal_customer ||
+    user.admin? ||
+    (user_is_proposal_artist && record.submitted?)
   end
 
   def create?
@@ -14,25 +16,29 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def destroy?
-    proposal_is_owned_by_user && proposal_is_pending
+    user_is_proposal_customer && record.pending?
   end
 
   def submit?
     destroy? && proposal_has_items
   end
 
+  def reject?
+    (user_is_proposal_artist || user_is_proposal_customer) && record.submitted?
+  end
+
   private
 
-  def proposal_is_owned_by_user
-    record.customer == user
+  def user_is_proposal_customer
+    user == record.customer
+  end
+
+  def user_is_proposal_artist
+    user == record.artist
   end
 
   def artist_offers_services
     record.artist.services.count > 0
-  end
-
-  def proposal_is_pending
-    record.status == 1
   end
 
   def proposal_has_items

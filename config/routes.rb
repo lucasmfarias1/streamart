@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :gigs, only: [:create, :show]
       resources :proposals, only: [:create, :show, :destroy] do
         post :submit, on: :member
+        post :reject, on: :member
 
         resources(
           :proposal_items,
