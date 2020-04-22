@@ -35,4 +35,8 @@ class Gig < ApplicationRecord
   def finished?
     status == 2
   end
+
+  def the_other_user(current_user)
+    customer == current_user ? artist : customer
+  end
 end

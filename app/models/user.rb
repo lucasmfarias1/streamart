@@ -32,6 +32,18 @@ class User < ApplicationRecord
     through: :proposals_as_customer,
     source: :proposal_items
   )
+  has_many(
+    :feedbacks_given,
+    class_name: 'Feedback',
+    foreign_key: :giver_id,
+    inverse_of: :giver
+  )
+  has_many(
+    :feedbacks_taken,
+    class_name: 'Feedback',
+    foreign_key: :taker_id,
+    inverse_of: :taker
+  )
   
   accepts_nested_attributes_for(
     :services,
