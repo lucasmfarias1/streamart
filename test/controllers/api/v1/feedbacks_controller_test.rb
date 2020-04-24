@@ -21,7 +21,7 @@ class Api::V1::FeedbacksControllerTest < ActionDispatch::IntegrationTest
 
   test 'creates feedback' do
     feedback_params = {
-      body: "I liked working with this person",
+      body: 'I liked working with this person',
       gig_id: @gig.id
     }
 
@@ -37,6 +37,24 @@ class Api::V1::FeedbacksControllerTest < ActionDispatch::IntegrationTest
       )
       p @response.status
     end
+  end
 
+  test 'shows feedback' do
+    feedback = Feedback.create(
+      body: 'I liked working with this person',
+      gig_id: @gig.id,
+      giver_id: @customer.id,
+      taker_id: @artist.id
+    )
+
+    get(
+      api_v1_feedback_path(feedback),
+      headers: @headers
+    )
+
+    response = JSON.parse(@response.body)['data']['feedback']
+
+    assert_response :success
+    assert feedback == Feedback.find(response['id'])
   end
 end

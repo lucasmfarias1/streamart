@@ -5,6 +5,10 @@ class FeedbackPolicy < ApplicationPolicy
     end
   end
 
+  def show?
+    user_is_related_to_gig || user.admin?
+  end
+
   def create?
     user_is_related_to_gig &&
     user_is_giver &&
