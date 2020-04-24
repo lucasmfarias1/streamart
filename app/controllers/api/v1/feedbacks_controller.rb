@@ -1,5 +1,5 @@
 class Api::V1::FeedbacksController < ApplicationController
-  before_action :set_feedback, only: [:show]
+  before_action :set_feedback, only: [:show, :destroy, :update]
 
   def show
     render :show, status: :ok
@@ -15,6 +15,22 @@ class Api::V1::FeedbacksController < ApplicationController
       head :ok
     else
       p feedback.errors
+      head :unprocessable_entity
+    end
+  end
+
+  def update
+    if @feedback.update(hidden: params[:hidden])
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @feedback.destroy
+      head :ok
+    else
       head :unprocessable_entity
     end
   end

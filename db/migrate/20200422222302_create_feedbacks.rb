@@ -5,6 +5,7 @@ class CreateFeedbacks < ActiveRecord::Migration[6.0]
       t.integer :taker_id
       t.text :body
       t.references :gig, null: false, foreign_key: true
+      t.boolean :hidden
 
       t.timestamps
     end

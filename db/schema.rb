@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_04_22_222302) do
     t.integer "taker_id"
     t.text "body"
     t.bigint "gig_id", null: false
+    t.boolean "hidden"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["gig_id"], name: "index_feedbacks_on_gig_id"

@@ -15,6 +15,14 @@ class FeedbackPolicy < ApplicationPolicy
     user_has_not_already_left_feedback
   end
 
+  def update?
+    user_is_taker || user.admin?
+  end
+
+  def destroy?
+    user.admin?
+  end
+
   private
 
   def user_is_related_to_gig
@@ -24,6 +32,10 @@ class FeedbackPolicy < ApplicationPolicy
 
   def user_is_giver
     record.giver == user
+  end
+
+  def user_is_taker
+    record.taker == user
   end
 
   def user_has_not_already_left_feedback
